@@ -1,0 +1,9 @@
+name: SimpleChat
+version: '${project.version}'
+main: adhdmc.simplechat.SimpleChat
+api-version: 1.19
+prefix: SimpleChat
+authors: [ _Rhythmic, Peashooter101 ]
+description: Basic chat formatting and decorating system
+depend:
+  - PlaceholderAPI
