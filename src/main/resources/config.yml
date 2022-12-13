@@ -1,0 +1,3 @@
+chat-format: "%player_displayname%<white> »</white><reset>"
+config-reload: "<prefix><gold> SimpleChat config has been reloaded"
+prefix: "<aqua>SimpleChat<white>»<reset>"

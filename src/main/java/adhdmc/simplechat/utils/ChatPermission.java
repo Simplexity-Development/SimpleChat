@@ -5,7 +5,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 
 public enum ChatPermission {
-    //Nickname Perms
+    //Chat Perms
     CHAT_COLOR("simplechat.chat.color", StandardTags.color()),
     CHAT_GRADIENT("simplechat.chat.gradient", StandardTags.gradient()),
     CHAT_RAINBOW("simplechat.chat.rainbow", StandardTags.rainbow()),

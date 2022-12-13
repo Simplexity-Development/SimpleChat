@@ -1,7 +1,10 @@
 package adhdmc.simplechat.utils;
 
+import adhdmc.simplechat.SimpleChat;
+import org.bukkit.configuration.file.FileConfiguration;
+
 public enum Message {
-    CHAT_FORMAT("%luckperms_prefix%%player_displayname%%luckperms_suffix%<white> »</white><reset> <message>"),
+    CHAT_FORMAT("%player_displayname%<white> »</white><reset>"),
     CONFIG_RELOAD("<prefix><gold> SimpleChat config has been reloaded"),
     PREFIX("<aqua>SimpleChat<white>»<reset>");
     String message;
@@ -11,9 +14,9 @@ public enum Message {
     public String getMessage() { return this.message; }
     private void setMessage(String message) { this.message = message; }
     public static void reloadChatFormat(){
-        /*YamlConfiguration config = SimpleChat.getChatConfig().getChatYML();
+        FileConfiguration config = SimpleChat.getInstance().getConfig();
         CHAT_FORMAT.setMessage(config.getString("chat-format"));
         CONFIG_RELOAD.setMessage(config.getString("config-reload"));
-        PREFIX.setMessage(config.getString("prefix"));*/
+        PREFIX.setMessage(config.getString("prefix"));
     }
 }
