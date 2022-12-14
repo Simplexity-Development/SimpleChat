@@ -4,7 +4,7 @@ import adhdmc.simplechat.SimpleChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public enum Message {
-    CHAT_FORMAT("%player_displayname%<white> »</white><reset>"),
+    CHAT_FORMAT("%player_displayname%<white> »</white><reset>%player_message%"),
     CONFIG_RELOAD("<prefix><gold> SimpleChat config has been reloaded"),
     PREFIX("<aqua>SimpleChat<white>»<reset>");
     String message;
