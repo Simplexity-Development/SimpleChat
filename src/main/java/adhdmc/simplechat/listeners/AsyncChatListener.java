@@ -5,7 +5,9 @@ import adhdmc.simplechat.utils.ChatPermission;
 import adhdmc.simplechat.utils.Message;
 import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatDecorateEvent;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -17,20 +19,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.Set;
 import java.util.regex.Matcher;
 
 public class AsyncChatListener implements Listener {
     Server server = SimpleChat.getInstance().getServer();
     MiniMessage miniMessage = SimpleChat.getMiniMessage();
     @EventHandler
-    public void onPlayerChat(AsyncChatDecorateEvent chatEvent){
+    public void onPlayerChat(AsyncChatEvent chatEvent){
         String originalMessage = miniMessage.serialize(chatEvent.originalMessage());
-        Player player = chatEvent.player();
+        Player player = chatEvent.getPlayer();
         String chatFormat = Message.CHAT_FORMAT.getMessage();
         Component chatStyle = chatStyleParse(player, chatFormat);
         Component messageParsed = permissionParsedMessage(player, originalMessage);
-        Component completeParsed = chatStyle.replaceText(TextReplacementConfig.builder().match("%player_message%").replacement(messageParsed).build());
-        chatEvent.result(completeParsed);
+        chatEvent.renderer().render(player, chatStyle, messageParsed, server);
     }
     //Stolen from https://github.com/YouHaveTrouble/JustChat @YouHaveTrouble
     private Component permissionParsedMessage(Player player, String message) {

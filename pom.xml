@@ -55,8 +55,8 @@
 
     <repositories>
         <repository>
-            <id>papermc-repo</id>
-            <url>https://repo.papermc.io/repository/maven-public/</url>
+            <id>purpur</id>
+            <url>https://repo.purpurmc.org/snapshots</url>
         </repository>
         <repository>
             <id>sonatype</id>
@@ -70,9 +70,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <groupId>org.purpurmc.purpur</groupId>
+            <artifactId>purpur-api</artifactId>
+            <version>1.19.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
