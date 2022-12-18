@@ -18,11 +18,12 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.regex.Matcher;
 
-public class AsyncChatListener implements Listener {
+public class AsyncChatListener implements Listener, ChatRenderer {
     Server server = SimpleChat.getInstance().getServer();
     MiniMessage miniMessage = SimpleChat.getMiniMessage();
     @EventHandler
@@ -32,7 +33,7 @@ public class AsyncChatListener implements Listener {
         String chatFormat = Message.CHAT_FORMAT.getMessage();
         Component chatStyle = chatStyleParse(player, chatFormat);
         Component messageParsed = permissionParsedMessage(player, originalMessage);
-        chatEvent.renderer().render(player, chatStyle, messageParsed, server);
+        render(player, chatStyle, messageParsed, server);
     }
     //Stolen from https://github.com/YouHaveTrouble/JustChat @YouHaveTrouble
     private Component permissionParsedMessage(Player player, String message) {
@@ -69,5 +70,10 @@ public class AsyncChatListener implements Listener {
             }
         }
         return styleParsed;
+    }
+
+    @Override
+    public @NotNull Component render(@NotNull Player player, @NotNull Component component, @NotNull Component component1, @NotNull Audience audience) {
+        return null;
     }
 }
