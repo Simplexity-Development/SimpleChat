@@ -12,6 +12,8 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Server;
@@ -23,17 +25,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 import java.util.regex.Matcher;
 
-public class AsyncChatListener implements Listener, ChatRenderer {
+public class AsyncChatListener implements Listener {
     Server server = SimpleChat.getInstance().getServer();
     MiniMessage miniMessage = SimpleChat.getMiniMessage();
     @EventHandler
     public void onPlayerChat(AsyncChatEvent chatEvent){
-        String originalMessage = miniMessage.serialize(chatEvent.originalMessage());
+        String message = miniMessage.serialize(chatEvent.message());
         Player player = chatEvent.getPlayer();
-        String chatFormat = Message.CHAT_FORMAT.getMessage();
-        Component chatStyle = chatStyleParse(player, chatFormat);
-        Component messageParsed = permissionParsedMessage(player, originalMessage);
-        render(player, chatStyle, messageParsed, server);
+        Component chatStyle = miniMessage.deserialize(Message.CHAT_FORMAT.getMessage(), papiTag(player));
+        Component messageParsed = permissionParsedMessage(player, message);
+        chatEvent.message(messageParsed);
+        //TODO make the chat style work
+        
+
     }
     //Stolen from https://github.com/YouHaveTrouble/JustChat @YouHaveTrouble
     private Component permissionParsedMessage(Player player, String message) {
@@ -46,34 +50,21 @@ public class AsyncChatListener implements Listener, ChatRenderer {
         MiniMessage msgParser = MiniMessage.builder().tags(tagResolver.build()).build();
         return msgParser.deserialize(message);
     }
-    //Stolen from https://github.com/YouHaveTrouble/JustChat @YouHaveTrouble
-    private Component chatStyleParse(Player player, String style) {
-
-        Component styleParsed = miniMessage.deserialize(style);
-
-        if (PlaceholderAPI.containsPlaceholders(style)) {
-            Matcher matcher = PlaceholderAPI.getPlaceholderPattern().matcher(style);
-            while (matcher.find()) {
-                String string = matcher.group(0);
-
-                String parsedPlaceholder = PlaceholderAPI.setPlaceholders(player, string);
-                if (parsedPlaceholder.equals(string)) continue;
-
-                Component placeholderComponent = LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder);
-
-                TextReplacementConfig replacementConfig = TextReplacementConfig
-                        .builder()
-                        .match(string)
-                        .replacement(placeholderComponent)
-                        .build();
-                styleParsed = styleParsed.replaceText(replacementConfig);
-            }
-        }
-        return styleParsed;
+    
+    //Credit: https://docs.advntr.dev/faq.html#how-can-i-use-bukkits-placeholderapi-in-minimessage-messages
+    /**
+     * Creates a tag resolver capable of resolving PlaceholderAPI tags for a given player.
+     *
+     * @param player the player
+     * @return the tag resolver
+     */
+    public @NotNull TagResolver papiTag(final @NotNull Player player) {
+        return TagResolver.resolver("papi", (argumentQueue, context) -> {
+            final String papiPlaceholder = argumentQueue.popOr(Message.ERROR_PAPI_NEEDS_ARGUMENT.getMessage()).value();
+            final String parsedPlaceholder = PlaceholderAPI.setPlaceholders(player, '%' + papiPlaceholder + '%');
+            final Component componentPlaceholder = LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder);
+            return Tag.selfClosingInserting(componentPlaceholder);
+        });
     }
 
-    @Override
-    public @NotNull Component render(@NotNull Player player, @NotNull Component component, @NotNull Component component1, @NotNull Audience audience) {
-        return null;
-    }
 }

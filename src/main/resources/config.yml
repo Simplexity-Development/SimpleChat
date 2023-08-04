@@ -1,3 +1,3 @@
-chat-format: "%player_displayname%<white> »</white><reset>%player_message%"
+chat-format: "<papi:player_displayname><white> »</white><reset>%player_message%"
 config-reload: "<prefix><gold> SimpleChat config has been reloaded"
 prefix: "<aqua>SimpleChat<white>»<reset>"

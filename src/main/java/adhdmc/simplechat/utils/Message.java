@@ -4,7 +4,8 @@ import adhdmc.simplechat.SimpleChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public enum Message {
-    CHAT_FORMAT("%player_displayname%<white> »</white><reset>%player_message%"),
+    CHAT_FORMAT("<papi:player_displayname><white> »</white><reset><message>"),
+    ERROR_PAPI_NEEDS_ARGUMENT("papi tag requires an argument"),
     CONFIG_RELOAD("<prefix><gold> SimpleChat config has been reloaded"),
     PREFIX("<aqua>SimpleChat<white>»<reset>");
     String message;
