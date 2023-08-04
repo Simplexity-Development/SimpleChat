@@ -32,11 +32,12 @@ public class AsyncChatListener implements Listener {
     public void onPlayerChat(AsyncChatEvent chatEvent){
         String message = miniMessage.serialize(chatEvent.message());
         Player player = chatEvent.getPlayer();
-        Component chatStyle = miniMessage.deserialize(Message.CHAT_FORMAT.getMessage(), papiTag(player));
+        // Component chatStyle = miniMessage.deserialize(Message.CHAT_FORMAT.getMessage(), papiTag(player));
+        String chatStyle = "%s >> %s";
         Component messageParsed = permissionParsedMessage(player, message);
         chatEvent.message(messageParsed);
         //TODO make the chat style work
-        
+        chatEvent.renderer((source, sourceDisplayName, chatMessage, viewer) -> Component.translatable(chatStyle, sourceDisplayName, chatMessage));
 
     }
     //Stolen from https://github.com/YouHaveTrouble/JustChat @YouHaveTrouble

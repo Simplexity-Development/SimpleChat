@@ -1,6 +1,6 @@
 package adhdmc.simplechat;
 
-import adhdmc.simplechat.config.ConfigStuff;
+// import adhdmc.simplechat.config.ConfigStuff;
 import adhdmc.simplechat.listeners.AsyncChatListener;
 import adhdmc.simplechat.utils.Message;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -22,7 +22,7 @@ public final class SimpleChat extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
         this.saveDefaultConfig();
-        ConfigStuff.setConfigDefaults();
+        // ConfigStuff.setConfigDefaults();
         Message.reloadChatFormat();
 
     }
