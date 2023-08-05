@@ -1,5 +1,5 @@
 name: SimpleChat
-version: '${project.version}'
+version: '1.0.0'
 main: adhdmc.simplechat.SimpleChat
 api-version: 1.19
 prefix: SimpleChat
@@ -7,44 +7,66 @@ authors: [ _Rhythmic, Peashooter101 ]
 description: Basic chat formatting and decorating system
 depend:
   - PlaceholderAPI
+commands:
+  simplechatreload:
+    description: reloads the simplechat plugin
+    default: op
+    permission: simplechat.reload
 permissions:
-  "simplechat.chat.color":
+  simplechat.chat.color:
     description: "Allows player to use colors in chat"
-  "simplechat.chat.gradient":
+    default: op
+  simplechat.chat.gradient:
     description: "Allows player to use gradients in chat"
-  "simplechat.chat.rainbow":
+    default: op
+  simplechat.chat.rainbow:
     description: "Allows player to use the rainbow tag in chat"
-  "simplechat.chat.reset":
+    default: op
+  simplechat.chat.reset:
     description: "Allows player to reset their chat formatting"
-  "simplechat.chat.format.underline":
+    default: op
+  simplechat.chat.format.underline:
     description: "Allows player to use underline in chat"
-  "simplechat.chat.format.italic":
+    default: op
+  simplechat.chat.format.italic:
     description: "Allows player to use italics in chat"
-  "simplechat.chat.format.strikethrough":
+    default: op
+  simplechat.chat.format.strikethrough:
     description: "Allows player to use strikethrough in chat"
-  "simplechat.chat.format.bold":
+    default: op
+  simplechat.chat.format.bold:
     description: "Allows player to use bold formatting in chat"
-  "simplechat.chat.format.obfuscated":
+    default: op
+  simplechat.chat.format.obfuscated:
     description: "Allows player to use obfuscation formatting in chat"
-  "simplechat.chat.special.hover":
+    default: op
+  simplechat.chat.special.hover:
     description: "Allows player to use hover tags in chat"
-  "simplechat.chat.special.click":
+    default: false
+  simplechat.chat.special.click:
     description: "Allows player to use clickable tags in chat"
-  "simplechat.chat.special.newline":
+    default: false
+  simplechat.chat.special.newline:
     description: "Allows player to use new line tags in chat"
-  "simplechat.chat.special.insert":
+    default: false
+  simplechat.chat.special.insert:
     description: "Allows player to use insertion tags in chat"
-  "simplechat.chat.special.keybind":
+    default: false
+  simplechat.chat.special.keybind:
     description: "Allows player to use keybind tags in chat"
-  "simplechat.chat.special.font":
+    default: false
+  simplechat.chat.special.font:
     description: "Allows player to use font tags in chat"
-  "simplechat.chat.special.selector":
+    default: false
+  simplechat.chat.special.selector:
     description: "Allows player to use selector tags in chat"
-  "simplechat.chat.special.transition":
+    default: false
+  simplechat.chat.special.transition:
     description: "Allows player to use transition tags in chat"
-  "simplechat.chat.special.translatable":
+    default: false
+  simplechat.chat.special.translatable:
     description: "Allows player to use translatable tags in chat"
-  "simplechat.admin":
-    description: ""
-  "simplechat.reload":
+    default: false
+  simplechat.reload:
     description: "Allows player to reload SimpleChat configuration"
+    default: op

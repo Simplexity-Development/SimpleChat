@@ -24,9 +24,6 @@ public enum ChatPermission {
     CHAT_SELECTOR("simplechat.chat.special.selector", StandardTags.selector()),
     CHAT_TRANSITION("simplechat.chat.special.transition", StandardTags.transition()),
     CHAT_TRANSLATABLE("simplechat.chat.special.translatable", StandardTags.translatable()),
-
-    //Command Perms
-    CHAT_ADMIN("simplechat.admin", null),
     CHAT_RELOAD("simplechat.reload", null);
 
     private final String permission;
@@ -35,11 +32,6 @@ public enum ChatPermission {
     ChatPermission(String permission, TagResolver resolver) {
         this.permission = permission;
         this.resolver = resolver;
-    }
-
-    ChatPermission(String permission) {
-        this.permission = permission;
-        this.resolver = null;
     }
 
     public String getPermission() {
