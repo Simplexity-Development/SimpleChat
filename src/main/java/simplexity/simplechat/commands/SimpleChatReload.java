@@ -1,13 +1,14 @@
-package adhdmc.simplechat.commands;
+package simplexity.simplechat.commands;
 
-import adhdmc.simplechat.SimpleChat;
-import adhdmc.simplechat.utils.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import simplexity.simplechat.SimpleChat;
+import simplexity.simplechat.utils.Message;
 
 public class SimpleChatReload implements CommandExecutor {
+
     
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {

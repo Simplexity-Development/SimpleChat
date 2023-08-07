@@ -1,4 +1,4 @@
-package adhdmc.simplechat.utils;
+package simplexity.simplechat.utils;
 
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;

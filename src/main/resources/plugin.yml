@@ -1,6 +1,6 @@
 name: SimpleChat
 version: '1.0.0'
-main: adhdmc.simplechat.SimpleChat
+main: simplexity.simplechat.SimpleChat
 api-version: 1.19
 prefix: SimpleChat
 authors: [ _Rhythmic, Peashooter101 ]

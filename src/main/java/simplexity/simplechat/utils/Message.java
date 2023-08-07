@@ -1,6 +1,6 @@
-package adhdmc.simplechat.utils;
+package simplexity.simplechat.utils;
 
-import adhdmc.simplechat.SimpleChat;
+import simplexity.simplechat.SimpleChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public enum Message {

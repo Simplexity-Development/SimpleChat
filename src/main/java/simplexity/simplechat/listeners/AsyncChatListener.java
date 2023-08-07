@@ -1,8 +1,5 @@
-package adhdmc.simplechat.listeners;
+package simplexity.simplechat.listeners;
 
-import adhdmc.simplechat.SimpleChat;
-import adhdmc.simplechat.utils.ChatPermission;
-import adhdmc.simplechat.utils.Message;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -17,6 +14,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
+import simplexity.simplechat.SimpleChat;
+import simplexity.simplechat.utils.ChatPermission;
+import simplexity.simplechat.utils.Message;
 
 public class AsyncChatListener implements Listener {
     
@@ -25,7 +25,6 @@ public class AsyncChatListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerChat(AsyncChatEvent chatEvent) {
         String message = PlainTextComponentSerializer.plainText().serialize(chatEvent.message());
-        System.out.println(message);
         Player player = chatEvent.getPlayer();
         Component messageParsed = permissionParsedMessage(player, message);
         chatEvent.message(messageParsed);
@@ -35,6 +34,7 @@ public class AsyncChatListener implements Listener {
                         Placeholder.component("player", sourceDisplayName),
                         Placeholder.component("message", messageParsed)));
     }
+    
     
     //Stolen from https://github.com/YouHaveTrouble/JustChat @YouHaveTrouble
     private Component permissionParsedMessage(Player player, String message) {

@@ -1,10 +1,9 @@
-package adhdmc.simplechat;
+package simplexity.simplechat;
 
-// import adhdmc.simplechat.config.ConfigStuff;
 
-import adhdmc.simplechat.commands.SimpleChatReload;
-import adhdmc.simplechat.listeners.AsyncChatListener;
-import adhdmc.simplechat.utils.Message;
+import simplexity.simplechat.commands.SimpleChatReload;
+import simplexity.simplechat.listeners.AsyncChatListener;
+import simplexity.simplechat.utils.Message;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
