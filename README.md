@@ -1,5 +1,5 @@
 # SimpleChat
-
+## Depends on Placeholder API
 Really basic chat formatting plugin with a lot of permissions for which formatting should be allowed
 
 Chat formatting is in minimessage formatting, you can use this site to see how it'll look https://webui.advntr.dev/
