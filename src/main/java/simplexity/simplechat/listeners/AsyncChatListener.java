@@ -61,7 +61,12 @@ public class AsyncChatListener implements Listener {
         return TagResolver.resolver("papi", (argumentQueue, context) -> {
             final String papiPlaceholder = argumentQueue.popOr(Message.ERROR_PAPI_NEEDS_ARGUMENT.getMessage()).value();
             final String parsedPlaceholder = PlaceholderAPI.setPlaceholders(player, '%' + papiPlaceholder + '%');
-            final Component componentPlaceholder = LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder);
+            Component componentPlaceholder;
+            if (parsedPlaceholder.contains("§")) {
+                componentPlaceholder = LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder);
+            } else {
+                componentPlaceholder = miniMessage.deserialize(parsedPlaceholder);
+            }
             return Tag.selfClosingInserting(componentPlaceholder);
         });
     }

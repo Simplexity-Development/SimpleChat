@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "simplexity"
-version = "1.0.0"
+version = "1.0.1"
 
 dependencies {
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
