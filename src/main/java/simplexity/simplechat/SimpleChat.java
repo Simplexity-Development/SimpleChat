@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import simplexity.simplechat.commands.SimpleChatReload;
 import simplexity.simplechat.listeners.AsyncChatListener;
+import simplexity.simplechat.listeners.AsyncChatListenerPAPI;
 import simplexity.simplechat.utils.Message;
 
 import java.util.Objects;
@@ -20,10 +21,9 @@ public final class SimpleChat extends JavaPlugin {
     public void onEnable() {
         instance = this;
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            Bukkit.getPluginManager().registerEvents(new AsyncChatListener(), this);
+            Bukkit.getPluginManager().registerEvents(new AsyncChatListenerPAPI(), this);
         } else {
-            getLogger().warning("SimpleChat requires PlaceholderAPI to be installed. Disabling SimpleChat.");
-            Bukkit.getPluginManager().disablePlugin(this);
+            Bukkit.getPluginManager().registerEvents(new AsyncChatListener(), this);
         }
         Objects.requireNonNull(this.getCommand("simplechatreload")).setExecutor(new SimpleChatReload());
         this.saveDefaultConfig();
