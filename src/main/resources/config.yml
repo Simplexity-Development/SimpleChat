@@ -1,5 +1,6 @@
 #To use placeholder API placeholders, use <papi:placeholder> like <papi:player_displayname> instead of %player_displayname%
 #<player> for player's display name and <message> for the message
 chat-format: "<player><white> » </white><reset><message>"
+empty-format: "<white>[nothing]</white>"
 #lang options
 config-reload: "<aqua>SimpleChat<white> »<reset><gold> SimpleChat config has been reloaded"

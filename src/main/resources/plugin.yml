@@ -67,6 +67,9 @@ permissions:
   simplechat.chat.special.translatable:
     description: "Allows player to use translatable tags in chat"
     default: false
+  simplechat.item.show-item:
+    description: "Allows a player to use <item> to show an item in chat"
+    default: op
   simplechat.reload:
     description: "Allows player to reload SimpleChat configuration"
     default: op

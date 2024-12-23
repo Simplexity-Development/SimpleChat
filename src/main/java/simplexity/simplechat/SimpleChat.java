@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import simplexity.simplechat.commands.SimpleChatReload;
 import simplexity.simplechat.listeners.AsyncChatListener;
-import simplexity.simplechat.listeners.AsyncChatListenerPAPI;
 import simplexity.simplechat.utils.Message;
 
 import java.util.Objects;
@@ -14,19 +13,22 @@ import java.util.Objects;
 public final class SimpleChat extends JavaPlugin {
     
     private static SimpleChat instance;
+    private static boolean papiEnabled = false;
     
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
-    
+
+
     @Override
     public void onEnable() {
         instance = this;
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            Bukkit.getPluginManager().registerEvents(new AsyncChatListenerPAPI(), this);
-        } else {
-            Bukkit.getPluginManager().registerEvents(new AsyncChatListener(), this);
+            papiEnabled = true;
         }
+        this.getServer().getPluginManager().registerEvents(new AsyncChatListener(), this);
         Objects.requireNonNull(this.getCommand("simplechatreload")).setExecutor(new SimpleChatReload());
         this.saveDefaultConfig();
+        getConfig().options().copyDefaults(true);
+        saveConfig();
         Message.reloadChatFormat();
     }
     
@@ -38,5 +40,10 @@ public final class SimpleChat extends JavaPlugin {
     public static SimpleChat getInstance() {
         return instance;
     }
-    
+
+    public static boolean isPapiEnabled() {
+        return papiEnabled;
+    }
+
+
 }
