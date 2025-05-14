@@ -1,6 +1,15 @@
 #To use placeholder API placeholders, use <papi:placeholder> like <papi:player_displayname> instead of %player_displayname%
 #<player> for player's display name and <message> for the message
 chat-format: "<player><white> » </white><reset><message>"
-empty-format: "<white>[nothing]</white>"
+show-item:
+  empty-format: "<white>[nothing]</white>"
+#Permission-based formats - name is not important but must be unique. Highest priority format someone has will be the one used.
+permission-formatting:
+  enabled: false
+  formats:
+    some-name:
+      permission: "some.custom.permission-name"
+      format: "[THIS PERSON HAS OP AND HASN'T CONFIGURED THE CHAT PLUGIN LOL] <player> <white> » </white><reset><message>"
+      priority: 0
 #lang options
 config-reload: "<aqua>SimpleChat<white> »<reset><gold> SimpleChat config has been reloaded"
