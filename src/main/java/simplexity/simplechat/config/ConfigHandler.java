@@ -21,6 +21,7 @@ public class ConfigHandler {
 
     private final HashMap<Permission, String> chatFormats = new HashMap<>();
     private final HashMap<Permission, Integer> formatPriority = new HashMap<>();
+    private String linkFormat;
     private final Logger logger = SimpleChat.getInstance().getLogger();
 
     private String defaultFormat, emptyItemFormat, configReloaded;
@@ -32,6 +33,7 @@ public class ConfigHandler {
         defaultFormat = config.getString("chat-format", "<player><white> » </white><reset><message>");
         emptyItemFormat = config.getString("show-item.empty-format", "<white>[nothing]</white>");
         configReloaded = config.getString("config-reloaded", "<aqua>SimpleChat<white> »<reset><gold> SimpleChat config has been reloaded");
+        linkFormat = config.getString("link-format", "<link>");
         permissionFormatting = config.getBoolean("permission-formatting.enabled", false);
         if (permissionFormatting) populateFormats(config);
     }
@@ -87,4 +89,7 @@ public class ConfigHandler {
     }
 
 
+    public String getLinkFormat() {
+        return linkFormat;
+    }
 }

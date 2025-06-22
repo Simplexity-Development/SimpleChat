@@ -13,3 +13,4 @@ permission-formatting:
       priority: 0
 #lang options
 config-reload: "<aqua>SimpleChat<white> »<reset><gold> SimpleChat config has been reloaded"
+link-format: "<link>"

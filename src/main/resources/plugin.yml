@@ -13,6 +13,9 @@ commands:
     default: op
     permission: simplechat.reload
 permissions:
+  simplechat.chat.links:
+    description: "Parses links so players can click them"
+    default: op
   simplechat.chat.color:
     description: "Allows player to use colors in chat"
     default: op

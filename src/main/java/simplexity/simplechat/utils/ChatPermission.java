@@ -24,6 +24,7 @@ public enum ChatPermission {
     CHAT_SELECTOR("simplechat.chat.special.selector", StandardTags.selector()),
     CHAT_TRANSITION("simplechat.chat.special.transition", StandardTags.transition()),
     CHAT_TRANSLATABLE("simplechat.chat.special.translatable", StandardTags.translatable()),
+    CHAT_LINKS("simplechat.chat.links", null),
     SHOW_ITEM("simplechat.item.show-item", null),
     CHAT_RELOAD("simplechat.reload", null);
 

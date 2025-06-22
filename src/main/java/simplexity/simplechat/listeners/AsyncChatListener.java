@@ -3,6 +3,7 @@ package simplexity.simplechat.listeners;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -23,24 +24,22 @@ import simplexity.simplechat.utils.ChatPermission;
 import simplexity.simplechat.utils.Message;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AsyncChatListener implements Listener {
 
-    static MiniMessage miniMessage = SimpleChat.getMiniMessage();
+    private static final MiniMessage miniMessage = SimpleChat.getMiniMessage();
+    private static final Pattern URL_PATTERN = Pattern.compile("(?<=\\s|^)(https?://\\S+)(?=\\s|$)", Pattern.CASE_INSENSITIVE);
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerChat(AsyncChatEvent chatEvent) {
-        String message = PlainTextComponentSerializer.plainText().serialize(chatEvent.message());
+        String plainMessage = PlainTextComponentSerializer.plainText().serialize(chatEvent.message());
         Player player = chatEvent.getPlayer();
-        Component messageParsed = permissionParsedMessage(player, message);
-        chatEvent.message(messageParsed);
-        if (SimpleChat.isPapiEnabled()) {
-            chatEvent.renderer((source, sourceDisplayName, chatMessage, viewer) ->
-                    renderedMessage(player, messageParsed, sourceDisplayName));
-        } else {
-            chatEvent.renderer((source, sourceDisplayName, chatMessage, viewer) ->
-                    renderedMessage(player, messageParsed, sourceDisplayName));
-        }
+        chatEvent.renderer((source, sourceDisplayName, chatMessage, viewer) -> {
+            Component permissionParsed = permissionParsedMessage(player, plainMessage);
+            return renderedMessage(player, permissionParsed, sourceDisplayName);
+        });
     }
 
     private Component renderedMessage(Player player, Component permissionParsedMessage, Component sourceDisplayName) {
@@ -72,6 +71,10 @@ public class AsyncChatListener implements Listener {
     //Stolen from https://github.com/YouHaveTrouble/JustChat @YouHaveTrouble
     private Component permissionParsedMessage(Player player, String message) {
         TagResolver.Builder tagResolver = TagResolver.builder();
+        if (player.hasPermission(ChatPermission.CHAT_LINKS.getPermission())) {
+            message = detectAndWrapLinks(message);
+            tagResolver.resolver(urlClickTag());
+        }
         for (ChatPermission perm : ChatPermission.values()) {
             if (player.hasPermission(perm.getPermission()) && perm.getTagResolver() != null) {
                 tagResolver.resolver(perm.getTagResolver());
@@ -114,6 +117,39 @@ public class AsyncChatListener implements Listener {
         HoverEvent<HoverEvent.ShowItem> hoverEvent = itemInHand.asHoverEvent();
 
         return Placeholder.component("item", itemInHand.displayName().hoverEvent(hoverEvent));
+    }
+
+    public static TagResolver urlClickTag() {
+        return TagResolver.resolver("link", (args, ctx) -> {
+            if (!args.hasNext()) {
+                throw ctx.newException("Click requires a type");
+            }
+            String type = args.pop().value();
+            if (!type.equalsIgnoreCase("open_url")) {
+                throw ctx.newException("This tag resolver is only for open URL - not other click types");
+            }
+
+            if (!args.hasNext()) {
+                throw ctx.newException("Open URL requires a URL");
+            }
+            String url = args.pop().value();
+
+            return Tag.styling(ClickEvent.openUrl(url));
+        });
+    }
+
+    public static String detectAndWrapLinks(String input) {
+        Matcher matcher = URL_PATTERN.matcher(input);
+        StringBuilder stringBuilder = new StringBuilder();
+        while (matcher.find()) {
+            String url = matcher.group(1);
+            String linkFormat = ConfigHandler.getInstance().getLinkFormat();
+            linkFormat = linkFormat.replace("<link>", url);
+            String wrapped = "<click:open_url:'" + url + "'>" + linkFormat + "</click>";
+            matcher.appendReplacement(stringBuilder, Matcher.quoteReplacement(wrapped));
+        }
+        matcher.appendTail(stringBuilder);
+        return stringBuilder.toString();
     }
 
 }
