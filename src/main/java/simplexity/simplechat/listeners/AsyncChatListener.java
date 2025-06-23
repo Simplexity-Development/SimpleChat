@@ -120,7 +120,7 @@ public class AsyncChatListener implements Listener {
     }
 
     public static TagResolver urlClickTag() {
-        return TagResolver.resolver("link", (args, ctx) -> {
+        return TagResolver.resolver("click", (args, ctx) -> {
             if (!args.hasNext()) {
                 throw ctx.newException("Click requires a type");
             }
