@@ -3,6 +3,7 @@ package simplexity.simplechat.config;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import simplexity.simplechat.SimpleChat;
 
 import java.util.HashMap;
@@ -48,7 +49,12 @@ public class ConfigHandler {
         }
         for (String key : section.getKeys(false)) {
             logger.info("key: " + key);
-            Permission permission = new Permission(key + ".permission");
+            String permissionName = section.getString(key + ".permission");
+            if (permissionName == null || permissionName.isEmpty()) {
+                logger.warning("No valid permission name provided for " + key + ", unable to continue registering this format");
+                continue;
+            }
+            Permission permission = new Permission(permissionName, PermissionDefault.OP);
             logger.info("Permission: " + permission);
             String format = section.getString(key + ".format");
             logger.info("format: " + format);
