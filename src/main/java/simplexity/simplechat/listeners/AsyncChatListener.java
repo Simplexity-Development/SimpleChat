@@ -1,7 +1,6 @@
 package simplexity.simplechat.listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -9,7 +8,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,11 +15,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
-import org.jetbrains.annotations.NotNull;
 import simplexity.simplechat.SimpleChat;
 import simplexity.simplechat.config.ConfigHandler;
+import simplexity.simplechat.hooks.MiniPlaceholdersHook;
+import simplexity.simplechat.hooks.PapiHook;
 import simplexity.simplechat.utils.ChatPermission;
-import simplexity.simplechat.utils.Message;
+import simplexity.simplechat.utils.Util;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -36,6 +35,8 @@ public class AsyncChatListener implements Listener {
     public void onPlayerChat(AsyncChatEvent chatEvent) {
         String plainMessage = PlainTextComponentSerializer.plainText().serialize(chatEvent.message());
         Player player = chatEvent.getPlayer();
+        Util.debug("Chat event fired for player: " + player.getName());
+        Util.debug("Plain message: " + plainMessage);
         chatEvent.renderer((source, sourceDisplayName, chatMessage, viewer) -> {
             Component permissionParsed = permissionParsedMessage(player, plainMessage);
             return renderedMessage(player, permissionParsed, sourceDisplayName);
@@ -44,6 +45,7 @@ public class AsyncChatListener implements Listener {
 
     private Component renderedMessage(Player player, Component permissionParsedMessage, Component sourceDisplayName) {
         String format = ConfigHandler.getInstance().getDefaultFormat();
+        Util.debug("Starting with default format: " + format);
         if (ConfigHandler.getInstance().shouldDoPermissionFormatting()) {
             HashMap<Permission, String> formats = ConfigHandler.getInstance().getFormats();
             HashMap<Permission, Integer> priorities = ConfigHandler.getInstance().getFormatPriority();
@@ -55,56 +57,53 @@ public class AsyncChatListener implements Listener {
                 format = formats.get(permission);
                 currentPriority = priority;
             }
+            Util.debug("Format after permission check: " + format);
         }
+
+        TagResolver.Builder resolverBuilder = TagResolver.builder()
+                .resolver(Placeholder.component("player", sourceDisplayName))
+                .resolver(Placeholder.component("message", permissionParsedMessage));
         if (SimpleChat.isPapiEnabled()) {
-            return miniMessage.deserialize(format,
-                    papiTag(player),
-                    Placeholder.component("player", sourceDisplayName),
-                    Placeholder.component("message", permissionParsedMessage));
+            Util.debug("PAPI is enabled, adding PAPI resolver for: " + player.getName());
+            resolverBuilder.resolver(PapiHook.papiTag(player));
         }
-        return miniMessage.deserialize(format,
-                Placeholder.component("player", sourceDisplayName),
-                Placeholder.component("message", permissionParsedMessage));
+        if (SimpleChat.isMiniPlaceholdersEnabled()) {
+            Util.debug("MiniPlaceholders is enabled, adding resolver for: " + player.getName());
+            resolverBuilder.resolver(MiniPlaceholdersHook.miniPlaceholderTag());
+        }
+        Component result = miniMessage.deserialize(format, player, resolverBuilder.build());
+        Util.debug("Final rendered component: " + PlainTextComponentSerializer.plainText().serialize(result));
+        return result;
     }
 
 
     //Stolen from https://github.com/YouHaveTrouble/JustChat @YouHaveTrouble
     private Component permissionParsedMessage(Player player, String message) {
         TagResolver.Builder tagResolver = TagResolver.builder();
-        if (player.hasPermission(ChatPermission.CHAT_LINKS.getPermission())) {
+        boolean usePermissions = ConfigHandler.getInstance().isChatParsingUsePermissions();
+        if (isFeatureEnabled(player, ChatPermission.CHAT_LINKS, usePermissions)) {
             message = detectAndWrapLinks(message);
             tagResolver.resolver(urlClickTag());
         }
         for (ChatPermission perm : ChatPermission.values()) {
-            if (player.hasPermission(perm.getPermission()) && perm.getTagResolver() != null) {
+            if (perm.getTagResolver() == null) continue;
+            if (isFeatureEnabled(player, perm, usePermissions)) {
                 tagResolver.resolver(perm.getTagResolver());
             }
         }
-        if (player.hasPermission(ChatPermission.SHOW_ITEM.getPermission())) {
+        if (isFeatureEnabled(player, ChatPermission.SHOW_ITEM, usePermissions)) {
             tagResolver.resolver(itemTag(player));
         }
         MiniMessage msgParser = MiniMessage.builder().tags(tagResolver.build()).build();
         return msgParser.deserialize(message);
     }
 
-    /**
-     * Creates a tag resolver capable of resolving PlaceholderAPI tags for a given player.
-     *
-     * @param player the player
-     * @return the tag resolver
-     */
-    public static @NotNull TagResolver papiTag(final @NotNull Player player) {
-        return TagResolver.resolver("papi", (argumentQueue, context) -> {
-            final String papiPlaceholder = argumentQueue.popOr(Message.ERROR_PAPI_NEEDS_ARGUMENT.getMessage()).value();
-            final String parsedPlaceholder = PlaceholderAPI.setPlaceholders(player, '%' + papiPlaceholder + '%');
-            Component componentPlaceholder;
-            if (parsedPlaceholder.contains("§")) {
-                componentPlaceholder = LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder);
-            } else {
-                componentPlaceholder = miniMessage.deserialize(parsedPlaceholder);
-            }
-            return Tag.selfClosingInserting(componentPlaceholder);
-        });
+    private boolean isFeatureEnabled(Player player, ChatPermission perm, boolean usePermissions) {
+        if (perm.getConfigKey() == null) {
+            return player.hasPermission(perm.getPermission());
+        }
+        if (!ConfigHandler.getInstance().isChatParsingEnabled(perm)) return false;
+        return !usePermissions || player.hasPermission(perm.getPermission());
     }
 
 

@@ -3,14 +3,40 @@
 chat-format: "<player><white> » </white><reset><message>"
 show-item:
   empty-format: "<white>[nothing]</white>"
+chat-parsing:
+  use-permissions: true
+  settings:
+    show-item: true
+    color: true
+    gradient: true
+    rainbow: true
+    bold: true
+    italic: true
+    strike-through: true
+    underline: true
+    obfuscated: false
+    reset: true
+    links: false
+    hover: false
+    # All the formats below this can be used maliciously and I highly recommend not enabling them unless you know all
+    # the people you're playing with
+    click: false
+    newline: false
+    insert: false
+    font: false
+    selector: false
+    transition: false
+    translatable: false
 #Permission-based formats - name is not important but must be unique. Highest priority format someone has will be the one used.
 permission-formatting:
   enabled: false
   formats:
     some-name:
       permission: "some.custom.permission-name"
-      format: "[THIS PERSON HAS OP AND HASN'T CONFIGURED THE CHAT PLUGIN LOL] <player> <white> » </white><reset><message>"
+      format: "[Player] <player> <white> » </white><reset><message>"
       priority: 0
 #lang options
 config-reload: "<aqua>SimpleChat<white> »<reset><gold> SimpleChat config has been reloaded"
 link-format: "<link>"
+debug:
+  enabled: false

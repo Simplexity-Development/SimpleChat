@@ -1,0 +1,17 @@
+name: SimpleChat
+version: '${project.version}'
+main: simplexity.simplechat.SimpleChat
+api-version: 1.21
+prefix: SimpleChat
+authors: [ _Rhythmic, Peashooter101 ]
+description: Basic chat formatting and decorating system
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    MiniPlaceholders:
+      load: BEFORE
+      required: false
+      join-classpath: true
